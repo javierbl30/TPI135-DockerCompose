@@ -1,0 +1,25 @@
+version: '2'
+services:
+    mariadbservice:
+        image: 'mysql-tpi'
+        build: ./Mysql-DB/.
+        container_name: 'contenedor_bd'
+        ports:
+        - "3306:3306"
+    payaraservice: 
+        image: 'payara-tpi'
+        build: ./Payara-server/.   
+        container_name: 'contenedor_java'
+        depends_on:
+        - mariadbservice
+        ports:
+        - "4848:4848"
+        - "8080:8080"
+    frontend:
+        image: 'apache-server-tpi'
+        build: ./FrontEnd/.
+        container_name: 'contenedor_frontend'
+        depends_on:
+        - payaraservice
+        ports:
+        - "80:80"
